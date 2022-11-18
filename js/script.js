@@ -4,7 +4,8 @@ let hystory = document.getElementById('hystory-value')
 
 let buffer = '0'
 let runningTotal = 0
-let previousOperator = ''
+let previousOperator = null
+let maxNumbers = 10
 
 //Функция нажатия клавиши
 function buttonClick(value) {
@@ -13,16 +14,30 @@ function buttonClick(value) {
 	} else {
 		addNumber(value)
 	}
+	/* 	screen.textContent = buffer */
 	screen.textContent = buffer
-	hystory.textContent = previousOperator
+	runningTotal === 0
+		? (hystory.textContent = `operation`)
+		: (hystory.textContent = runningTotal + previousOperator)
 }
 
 //Добавляем число в строку
 function addNumber(str) {
-	if (buffer === '0') {
-		buffer = str
+	if (
+		buffer === 'ERROR' ||
+		// проверка (напр) 5-5 и после = 0, то невозможно было добавить цифру
+		buffer.length === undefined
+	) {
+		buffer = ''
+	}
+	if (buffer.length <= maxNumbers - 1) {
+		if (buffer === '0') {
+			buffer = str
+		} else {
+			buffer += str
+		}
 	} else {
-		buffer += str
+		buffer = buffer.substring(0, maxNumbers)
 	}
 }
 //Добавляем символ в строку
@@ -43,6 +58,10 @@ function addSymbol(symbol) {
 			runningTotal = 0
 			break
 		case 'DEL':
+			// по замечанию 3
+			if (buffer === 'ERROR') {
+				addSymbol('C')
+			}
 			if (buffer.length === 1) {
 				buffer = '0'
 			} else {
@@ -53,7 +72,7 @@ function addSymbol(symbol) {
 			if (buffer.length === 1 && buffer === '0') {
 				buffer = '0.'
 			} else if (buffer.includes('.')) {
-				runningTotal = buffer
+				return
 			} else {
 				buffer += '.'
 			}
@@ -75,11 +94,14 @@ function addSymbol(symbol) {
 //Проверка перед калькуляцией
 function handleMath(symbol) {
 	if (buffer === '0') {
+		previousOperator = symbol
+		hystory.textContent = previousOperator
 		return
 	}
 	const intBuffer = parseFloat(buffer)
 	if (runningTotal === 0) {
 		runningTotal = intBuffer
+		previousOperator = symbol
 	} else {
 		calculate(intBuffer)
 	}
@@ -98,6 +120,7 @@ function calculate(intBuffer) {
 		} else if (previousOperator === '/') {
 			runningTotal /= intBuffer
 		}
+		runningTotal = +runningTotal.toFixed(6)
 	} catch (error) {
 		runningTotal = 'ERROR'
 	}
