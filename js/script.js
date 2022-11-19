@@ -14,8 +14,11 @@ function buttonClick(value) {
 	} else {
 		addNumber(value)
 	}
-	/* 	screen.textContent = buffer */
 	screen.textContent = buffer
+	if (runningTotal === 'ERROR') {
+		runningTotal = 0
+		screen.textContent = 'ERROR'
+	}
 	runningTotal === 0
 		? (hystory.textContent = `operation`)
 		: (hystory.textContent = runningTotal + previousOperator)
@@ -74,7 +77,9 @@ function addSymbol(symbol) {
 			} else if (buffer.includes('.')) {
 				return
 			} else {
-				buffer += '.'
+				if (buffer.length < maxNumbers) {
+					buffer += '.'
+				}
 			}
 			break
 		case '+/-':
@@ -121,6 +126,12 @@ function calculate(intBuffer) {
 			runningTotal /= intBuffer
 		}
 		runningTotal = +runningTotal.toFixed(6)
+
+		if (runningTotal.toString().length >= maxNumbers * 2) {
+			throw Error
+		} else {
+			runningTotal = runningTotal.toString().substring(0, maxNumbers * 2)
+		}
 	} catch (error) {
 		runningTotal = 'ERROR'
 	}
