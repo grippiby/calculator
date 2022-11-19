@@ -19,11 +19,7 @@ function buttonClick(value) {
 
 function chkErrors() {
 	screen.textContent = buffer
-	if (runningTotal === 'ERROR') {
-		runningTotal = 0
-		screen.textContent = 'ERROR'
-	}
-	if (isNaN(runningTotal)) {
+	if (isNaN(runningTotal) || isNaN(buffer) || runningTotal === 'ERROR') {
 		runningTotal = 0
 		screen.textContent = 'ERROR'
 	}
