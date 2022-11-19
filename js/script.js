@@ -49,7 +49,7 @@ function addSymbol(symbol) {
 		case 'C':
 			buffer = '0'
 			runningTotal = 0
-			previousOperator = ''
+			previousOperator = null
 			break
 		case '=':
 			if (previousOperator === null) {
