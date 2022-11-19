@@ -14,8 +14,16 @@ function buttonClick(value) {
 	} else {
 		addNumber(value)
 	}
+	chkErrors()
+}
+
+function chkErrors() {
 	screen.textContent = buffer
 	if (runningTotal === 'ERROR') {
+		runningTotal = 0
+		screen.textContent = 'ERROR'
+	}
+	if (isNaN(runningTotal)) {
 		runningTotal = 0
 		screen.textContent = 'ERROR'
 	}
@@ -135,7 +143,7 @@ function calculate(intBuffer) {
 	} catch (error) {
 		runningTotal = 'ERROR'
 	}
-	if (runningTotal === Infinity) {
+	if (runningTotal === 'Infinity') {
 		runningTotal = 'ERROR'
 	}
 }
