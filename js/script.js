@@ -72,7 +72,7 @@ function addSymbol(symbol) {
 			if (buffer.length === 1) {
 				buffer = '0'
 			} else {
-				buffer = buffer.toString().substring(0, buffer.length - 1)
+				buffer = buffer.toString().substring(0, buffer.toString().length - 1)
 			}
 			break
 		case ',':
