@@ -5,7 +5,7 @@ let hystory = document.getElementById('hystory-value')
 let buffer = '0'
 let runningTotal = 0
 let previousOperator = null
-let maxNumbers = 10
+let maxNumbers = 12
 
 //Функция нажатия клавиши
 function buttonClick(value) {
@@ -59,7 +59,7 @@ function addSymbol(symbol) {
 			if (previousOperator === null) {
 				return
 			}
-			calculate(parseFloat(buffer))
+			calculate(Number(buffer))
 			previousOperator = null
 			buffer = runningTotal
 			runningTotal = 0
@@ -72,7 +72,7 @@ function addSymbol(symbol) {
 			if (buffer.length === 1) {
 				buffer = '0'
 			} else {
-				buffer = buffer.substring(0, buffer.length - 1)
+				buffer = buffer.toString().substring(0, buffer.length - 1)
 			}
 			break
 		case ',':
@@ -90,7 +90,7 @@ function addSymbol(symbol) {
 			buffer = buffer * -1
 			break
 		case '%':
-			buffer = buffer / 100
+			buffer = (buffer / 100).toString()
 			break
 		case '+':
 		case '-':
@@ -107,7 +107,7 @@ function handleMath(symbol) {
 		hystory.textContent = previousOperator
 		return
 	}
-	const intBuffer = parseFloat(buffer)
+	const intBuffer = Number(buffer)
 	if (runningTotal === 0) {
 		runningTotal = intBuffer
 		previousOperator = symbol
@@ -117,7 +117,7 @@ function handleMath(symbol) {
 	previousOperator = symbol
 	buffer = '0'
 }
-
+// Считаем обычные числа
 function calculate(intBuffer) {
 	try {
 		if (previousOperator === '+') {
@@ -130,7 +130,6 @@ function calculate(intBuffer) {
 			runningTotal /= intBuffer
 		}
 		runningTotal = +runningTotal.toFixed(6)
-
 		if (runningTotal.toString().length >= maxNumbers * 2) {
 			throw Error
 		} else {
@@ -139,16 +138,12 @@ function calculate(intBuffer) {
 	} catch (error) {
 		runningTotal = 'ERROR'
 	}
-	if (runningTotal === 'Infinity') {
-		runningTotal = 'ERROR'
-	}
+	isFinite(runningTotal) ? runningTotal : (runningTotal = 'ERROR')
 }
-
 //присваиваем каждому диву слушатель событий
 function init() {
 	document.querySelectorAll('.item').forEach((button) =>
 		button.addEventListener('click', function (event) {
-			/* console.log(button.textContent) */
 			buttonClick(button.textContent)
 		})
 	)
