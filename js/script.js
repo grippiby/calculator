@@ -120,6 +120,7 @@ function handleMath(symbol) {
 // Считаем обычные числа
 function calculate(intBuffer) {
 	try {
+		runningTotal = Number(runningTotal)
 		if (previousOperator === '+') {
 			runningTotal += intBuffer
 		} else if (previousOperator === '-') {
